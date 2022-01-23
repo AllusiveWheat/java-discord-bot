@@ -8,6 +8,7 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
@@ -23,8 +24,11 @@ import static net.dv8tion.jda.api.requests.GatewayIntent.GUILD_VOICE_STATES;
 
 public class MusicBot extends ListenerAdapter {
     public static void main(String[] args) throws Exception {
-        JDABuilder.create("bot-token-here", GUILD_MESSAGES, GUILD_VOICE_STATES)
-                .addEventListeners(new MusicBot()).build();
+        String token = System.getenv("DISCORD_TOKEN");
+        System.out.println("Token: " + token);
+        JDABuilder.create(token, GUILD_MESSAGES, GUILD_VOICE_STATES)
+                .addEventListeners(new MusicBot()).setActivity(Activity.playing("Fuck java "))
+                .build();
     }
 
     private final AudioPlayerManager playerManager;
