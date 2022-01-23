@@ -15,7 +15,8 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.AudioManager;
-
+import java.util.Properties;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +25,17 @@ import static net.dv8tion.jda.api.requests.GatewayIntent.GUILD_VOICE_STATES;
 
 public class MusicBot extends ListenerAdapter {
     public static void main(String[] args) throws Exception {
-        String token = System.getenv("DISCORD_TOKEN");
+        Properties prop = new Properties();
+        InputStream inputStream =
+                MusicBot.class.getClassLoader().getResourceAsStream("config.properties");
+
+        if (inputStream != null) {
+            prop.load(inputStream);
+        } else {
+            throw new Exception("Could not load config.properties");
+        }
+
+        String token = prop.getProperty("token");
         System.out.println("Token: " + token);
         JDABuilder.create(token, GUILD_MESSAGES, GUILD_VOICE_STATES)
                 .addEventListeners(new MusicBot()).setActivity(Activity.playing("Fuck java "))
